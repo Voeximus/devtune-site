@@ -415,19 +415,14 @@ footer a{color:var(--dim)}
   <section>
     <div class="wrap">
       <p class="tick">You&rsquo;re in.</p>
-      <p class="dim">Two things below. Copy the key, copy the prompt, paste the prompt into your AI. That&rsquo;s the whole install.</p>
+      <p class="dim">Copy the prompt, paste it into your AI. That&rsquo;s the whole install &mdash; nothing to fill in.</p>
 
-      <h3 style="margin-top:40px">Your key</h3>
-      <div class="keybox" id="keyval">XXXX-XXXX</div>
-      <button class="btn btn-sm" data-copy="#keyval">Copy key</button>
-      <span class="copied" id="c1">copied</span>
-
-      <h3 style="margin-top:44px">The prompt</h3>
+      <h3 style="margin-top:40px">The prompt</h3>
       <div class="copywrap">
 <pre id="paste">You are installing DevTune into this project.
 
-1. Run exactly (the key is a flag — never put it after @ on the package name):
-   npx devtune init --key XXXX-XXXX
+1. Run exactly:
+   npx devtune init
    npx devtune doctor
 
 2. Read the files it wrote under .devtune/ai/ (or print the paths from init).
@@ -444,6 +439,19 @@ Cadence for long builds (hours):
 - Do not add a second physics engine</pre>
         <button class="btn btn-primary" data-copy="#paste">Copy the prompt</button>
         <span class="copied" id="c2">copied</span>
+      </div>
+
+      <!-- ⚠️ THE KEY IS SHOWN, NOT ASKED FOR. `init` stopped requiring one — it never validated
+           anything, so it was three steps of friction protecting nothing. It stays visible because
+           it is a real receipt worth keeping; it is just not part of the install. -->
+      <div class="box" style="margin-top:34px">
+        <h3>Your key &mdash; keep it, you don&rsquo;t need it</h3>
+        <div class="keybox" id="keyval">&mdash;</div>
+        <button class="btn btn-sm" data-copy="#keyval">Copy key</button>
+        <span class="copied" id="c1">copied</span>
+        <p class="dim" style="margin:16px 0 0; font-size:13px">Proof of purchase, nothing more. There&rsquo;s no
+          account and no licence server for it to be checked against &mdash; adding one would mean this
+          tool phoning home, and it never does. Quote it if you ever need support.</p>
       </div>
 
       <div class="box" style="margin-top:44px">
@@ -626,12 +634,11 @@ var FEEDBACK_FEATURE = '';
 var params = new URLSearchParams(location.search);
 if (params.get('paid')) {
   document.body.classList.add('paid');
+  /* ⚠️ THE PROMPT IS NO LONGER TOUCHED. It used to have `XXXX-XXXX` substituted into it, which is
+   * why `init` needed a key at all. The prompt now installs as written, so this only fills the
+   * receipt box — and a missing key leaves an em-dash rather than the literal word "null". */
   var key = params.get('key');
-  if (key) {
-    document.getElementById('keyval').textContent = key;
-    var pre = document.getElementById('paste');
-    pre.textContent = pre.textContent.replace('XXXX-XXXX', key);
-  }
+  if (key) document.getElementById('keyval').textContent = key;
 }
 
 </script>
