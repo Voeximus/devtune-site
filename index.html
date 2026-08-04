@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DevTune — edit your game while it's running</title>
+<meta name="description" content="Edit your three.js game while it's running, then press K and every change is written into your source code.">
+<meta property="og:title" content="DevTune — edit your game while it's running">
+<meta property="og:description" content="Press K and every change you made is written into your source code. For three.js. Localhost only.">
+<style>
+/* ─────────────────────────────────────────────────────────────────────────────
+   DevTune store. Arcade cabinet: black, white, one accent, hard edges.
+   Self-contained — no external fonts, scripts, or images.
+   Swap --font-display for the real pixel font when you have it licensed.
+   ───────────────────────────────────────────────────────────────────────────── */
+:root{
+  --bg:#000;
+  --ink:#fff;
+  --dim:#8b8b8b;
+  --line:#fff;
+  --accent:#86efac;
+  --font-display: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "Courier New", monospace;
+  --font-body: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "Courier New", monospace;
+  --pad: clamp(16px, 4vw, 40px);
+  --maxw: 1180px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:var(--font-body);
+  font-size:clamp(14px,1.05vw + 10px,17px);
+  line-height:1.65;
+  overflow-x:hidden;
+}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 var(--pad)}
+
+/* ── type ─────────────────────────────────────────────────────────────────── */
+h1,h2,h3,.eyebrow,.btn,.stat-label,.stat-value,.nav a,.logo,.tick,.step-n{
+  font-family:var(--font-display); text-transform:uppercase; letter-spacing:.12em;
+}
+h1{
+  font-size:clamp(34px,7.4vw,86px); line-height:1.06; font-weight:800;
+  margin:0 0 28px; letter-spacing:.02em;
+}
+h2{font-size:clamp(19px,2.4vw,28px); font-weight:800; margin:0 0 22px}
+h3{font-size:14px; font-weight:800; margin:0 0 8px; letter-spacing:.16em}
+p{margin:0 0 18px; max-width:62ch}
+.eyebrow{font-size:clamp(10px,1.5vw,13px); color:var(--dim); letter-spacing:.28em; margin:0 0 22px}
+.dim{color:var(--dim)}
+a{color:var(--ink)}
+
+/* ── nav ──────────────────────────────────────────────────────────────────── */
+header{
+  position:sticky; top:0; z-index:50; background:var(--bg);
+  border-bottom:3px solid var(--line);
+}
+.bar{
+  max-width:var(--maxw); margin:0 auto; padding:14px var(--pad);
+  display:flex; align-items:center; gap:18px;
+}
+.logo{font-size:clamp(16px,2.4vw,26px); font-weight:800; letter-spacing:.16em; display:flex; align-items:center; gap:12px}
+.key-glyph{display:block; width:34px; height:14px; flex:none}
+.nav{margin-left:auto; display:flex; align-items:center; gap:clamp(12px,2.4vw,30px)}
+.nav a{font-size:12px; text-decoration:none; color:var(--ink)}
+.nav a:hover{color:var(--accent)}
+.nav .price{color:var(--dim); font-size:12px}
+@media (max-width:620px){ .nav a.hide-sm{display:none} }
+
+/* ── buttons ──────────────────────────────────────────────────────────────── */
+.btn{
+  display:inline-block; padding:16px 30px; font-size:clamp(12px,1.5vw,15px); font-weight:800;
+  border:3px solid var(--line); background:var(--bg); color:var(--ink);
+  text-decoration:none; cursor:pointer; box-shadow:8px 8px 0 #333;
+  transition:transform .06s linear, box-shadow .06s linear;
+  font-family:var(--font-display); letter-spacing:.12em;
+}
+.btn:active{transform:translate(6px,6px); box-shadow:2px 2px 0 #333}
+.btn-primary{background:var(--ink); color:var(--bg); box-shadow:8px 8px 0 #444}
+.btn-sm{padding:10px 18px; font-size:11px; box-shadow:5px 5px 0 #333}
+.btn-row{display:flex; flex-wrap:wrap; gap:16px; margin:34px 0 0}
+
+/* ── sections ─────────────────────────────────────────────────────────────── */
+section{padding:clamp(48px,7vw,92px) 0; border-bottom:3px solid #262626}
+section:last-of-type{border-bottom:0}
+.hero{padding-top:clamp(40px,6vw,76px)}
+
+/* ── stat cabinet ─────────────────────────────────────────────────────────── */
+.stats{
+  display:grid; gap:0; margin-top:clamp(40px,6vw,70px);
+  grid-template-columns:repeat(4,1fr);
+  border:3px solid var(--line);
+}
+.stat{padding:22px 20px; border-right:3px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat-label{font-size:11px; color:var(--dim); letter-spacing:.2em; margin-bottom:10px}
+.stat-value{font-family:var(--font-display); font-size:clamp(20px,2.6vw,32px); font-weight:800; letter-spacing:.04em; line-height:1.1}
+.stat-note{font-size:12px; color:var(--dim); line-height:1.5; margin-top:10px}
+@media (max-width:900px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat{border-bottom:3px solid var(--line)}
+  .stat:nth-child(2n){border-right:0}
+  .stat:nth-child(n+3){border-bottom:0}
+}
+@media (max-width:480px){
+  .stats{grid-template-columns:1fr}
+  .stat{border-right:0; border-bottom:3px solid var(--line)}
+  .stat:last-child{border-bottom:0}
+}
+
+/* ── steps ────────────────────────────────────────────────────────────────── */
+.steps{display:grid; gap:0; grid-template-columns:repeat(3,1fr); border:3px solid var(--line)}
+.step{padding:26px 22px; border-right:3px solid var(--line)}
+.step:last-child{border-right:0}
+.step-n{font-family:var(--font-display); font-size:44px; font-weight:800; line-height:1; color:var(--dim); margin-bottom:14px}
+.step p{margin:0; font-size:14px}
+@media (max-width:820px){
+  .steps{grid-template-columns:1fr}
+  .step{border-right:0; border-bottom:3px solid var(--line)}
+  .step:last-child{border-bottom:0}
+}
+
+/* ── keys table ───────────────────────────────────────────────────────────── */
+.keys{display:grid; grid-template-columns:repeat(auto-fill,minmax(232px,1fr)); gap:14px; margin-top:8px}
+.keyrow{display:flex; align-items:center; gap:14px; border:2px solid #333; padding:12px 14px}
+kbd{
+  font-family:var(--font-display); font-weight:800; font-size:14px;
+  border:2px solid var(--line); padding:4px 10px; min-width:40px; text-align:center; flex:none;
+}
+.keyrow span{font-size:13px; color:var(--dim)}
+
+/* ── get / boxes ──────────────────────────────────────────────────────────── */
+.box{border:3px solid var(--line); padding:clamp(20px,3vw,32px)}
+.box + .box{margin-top:18px}
+ul.plain{list-style:none; padding:0; margin:0}
+ul.plain li{padding:11px 0 11px 24px; border-bottom:1px solid #262626; position:relative; font-size:14px}
+ul.plain li:last-child{border-bottom:0}
+ul.plain li::before{content:"▸"; position:absolute; left:0; color:var(--accent)}
+
+/* ── faq ──────────────────────────────────────────────────────────────────── */
+details{border-bottom:2px solid #262626}
+details summary{
+  cursor:pointer; padding:17px 30px 17px 0; font-size:14px; list-style:none; position:relative;
+  font-family:var(--font-display); text-transform:uppercase; letter-spacing:.08em; font-weight:800;
+}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"+"; position:absolute; right:2px; top:15px; font-size:20px; color:var(--dim)}
+details[open] summary::after{content:"–"}
+details p{padding:0 0 18px; font-size:14px; color:var(--dim); margin:0}
+
+/* ── code ─────────────────────────────────────────────────────────────────── */
+pre{
+  margin:0; padding:18px; border:2px solid #333; background:#0a0a0a;
+  overflow-x:auto; font-size:13px; line-height:1.7; white-space:pre; color:var(--ink);
+}
+code{font-family:var(--font-body)}
+.copywrap{position:relative}
+.copywrap .btn{margin-top:14px}
+
+/* ── receipt ──────────────────────────────────────────────────────────────── */
+#receipt{display:none}
+body.paid #sales{display:none}
+body.paid #receipt{display:block}
+.tick{font-family:var(--font-display); font-size:clamp(28px,5vw,54px); font-weight:800; color:var(--accent); letter-spacing:.06em; margin:0 0 10px}
+.keybox{
+  font-family:var(--font-display); font-size:clamp(20px,3.6vw,34px); font-weight:800; letter-spacing:.22em;
+  border:3px solid var(--accent); padding:18px 22px; text-align:center; word-break:break-all;
+}
+.copied{color:var(--accent); font-size:12px; margin-left:14px; opacity:0; transition:opacity .15s}
+.copied.on{opacity:1}
+
+/* ── footer ───────────────────────────────────────────────────────────────── */
+footer{padding:36px 0 60px; font-size:12px; color:var(--dim)}
+footer a{color:var(--dim)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <span class="logo">
+      <svg class="key-glyph" viewBox="0 0 34 14" aria-hidden="true" fill="none">
+        <rect x="1" y="3" width="8" height="8" stroke="#fff" stroke-width="2"/>
+        <path d="M9 7h22M24 7v4M29 7v4" stroke="#fff" stroke-width="2"/>
+      </svg>
+      DevTune
+    </span>
+    <nav class="nav">
+      <a href="#how" class="hide-sm">How</a>
+      <a href="#keys" class="hide-sm">Keys</a>
+      <span class="price">$1.99</span>
+      <a href="#get" class="btn btn-sm btn-primary">Get it</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ══════════════════════════════ SALES ══════════════════════════════════ -->
+<main id="sales">
+
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">1 player · made by Gino · three.js only · no account</p>
+      <h1>Edit your game<br>while it&rsquo;s running</h1>
+
+      <p>Then press <strong>K</strong> and every change you made is written into your source code.
+         No copying numbers out of a panel by hand, ever again.</p>
+
+      <p class="dim">Made by one person &mdash; hi, I&rsquo;m Gino. DevTune is for three.js games, and it covers
+         both halves of making one: your AI builds it, then you edit it live.</p>
+
+      <div class="btn-row">
+        <a href="#get" class="btn btn-primary">Get it &mdash; $1.99</a>
+        <a href="#how" class="btn">How it works</a>
+      </div>
+
+      <!-- Replace with the real capture: game on top, source file below, one unbroken take. -->
+      <div class="box" style="margin-top:44px; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; text-align:center">
+        <span class="dim" style="font-size:12px; letter-spacing:.2em; text-transform:uppercase">
+          [ screen capture goes here ]<br><br>
+          <span style="letter-spacing:.05em; text-transform:none">game running above &middot; source file below &middot; K lands and the number changes</span>
+        </span>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-label">Numbers retyped</div>
+          <div class="stat-value">0</div>
+          <div class="stat-note">K writes them into your source. You never read one off a panel again.</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Commands</div>
+          <div class="stat-value">0</div>
+          <div class="stat-note">You never run one yourself &mdash; your AI does</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Accounts</div>
+          <div class="stat-value">0</div>
+          <div class="stat-note">No sign-up, no login, no licence server phoning home</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Uploads</div>
+          <div class="stat-value">0</div>
+          <div class="stat-note">Nothing leaves your computer</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap">
+      <h2>How it works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-n">1</div>
+          <h3>Paste</h3>
+          <p>One block into Cursor, Claude Code, Grok or Codex. Not a zip, not a wizard.</p>
+        </div>
+        <div class="step">
+          <div class="step-n">2</div>
+          <h3>Your AI builds</h3>
+          <p>It installs DevTune and builds your game with it &mdash; physics, movement and camera included, so it isn&rsquo;t writing those from scratch. You never open a terminal.</p>
+        </div>
+        <div class="step">
+          <div class="step-n">3</div>
+          <h3>You edit live</h3>
+          <p>Open the URL. Press <strong>L</strong>, click anything, move it, tune it. Press <strong>K</strong>. Reload &mdash; it held.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="keys">
+    <div class="wrap">
+      <h2>What you can do while it runs</h2>
+      <p class="dim">The game keeps playing the whole time. Nothing restarts, nothing rebuilds.</p>
+      <div class="keys">
+        <div class="keyrow"><kbd>L</kbd><span>Open the editor over the running game</span></div>
+        <div class="keyrow"><kbd>Click</kbd><span>Select any object in the game</span></div>
+        <div class="keyrow"><kbd>Drag</kbd><span>Move it where it should have been</span></div>
+        <div class="keyrow"><kbd>C</kbd><span>Make it solid so the player collides</span></div>
+        <div class="keyrow"><kbd>F</kbd><span>Freeze everything mid-air and look</span></div>
+        <div class="keyrow"><kbd>Tab</kbd><span>Take control and drive</span></div>
+        <div class="keyrow"><kbd>Z</kbd><span>Frame what you selected</span></div>
+        <div class="keyrow"><kbd>X</kbd><span>Lock things you don&rsquo;t want touched</span></div>
+        <div class="keyrow"><kbd>/</kbd><span>Search when the list gets long</span></div>
+        <div class="keyrow"><kbd>K</kbd><span>Write it all into your source files</span></div>
+      </div>
+
+      <div class="box" style="margin-top:34px">
+        <h3>Honest about what it can&rsquo;t do</h3>
+        <p class="dim" style="margin:0">Every control has a real minimum and maximum, set by whoever wrote that line &mdash;
+          nothing is guessed. If a number won&rsquo;t take effect until the next spawn or the next wave,
+          the control says so instead of pretending it changed. And <strong>Panic</strong> puts the running
+          game back to exactly what your source says, without writing anything.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="get">
+    <div class="wrap">
+      <h2>What you get for $1.99</h2>
+      <div class="box">
+        <ul class="plain">
+          <li><strong>A key and the prompt</strong> &mdash; paste it into your AI and you&rsquo;re installed</li>
+          <li><strong>The editor</strong> &mdash; select, move, solidify and tune objects in the running game</li>
+          <li><strong>Keep</strong> &mdash; your numbers, toggles and moved positions written into your real source files</li>
+          <li><strong>Physics, movement and camera</strong> &mdash; working code your AI builds on instead of reinventing</li>
+          <li><strong>Checks that fail closed</strong> &mdash; your AI can&rsquo;t call the build done; the checks decide</li>
+        </ul>
+      </div>
+
+      <div class="btn-row">
+        <!-- Point this at your hosted checkout. Success URL should return to /?paid=1 with the key. -->
+        <a href="#" class="btn btn-primary" id="buy">Get it &mdash; $1.99</a>
+      </div>
+      <p class="dim" style="margin-top:18px; font-size:13px">
+        One payment. Works across your projects. Same paste for Cursor, Claude Code, Grok or Codex.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Questions</h2>
+      <details><summary>Do I install anything myself?</summary>
+        <p>No. You paste one block and your AI runs everything. You never open a terminal.</p></details>
+      <details><summary>Which AI?</summary>
+        <p>Any coding agent that can run terminal commands &mdash; Cursor, Claude Code, Grok, Codex. Same paste for all of them.</p></details>
+      <details><summary>Unity or Godot?</summary>
+        <p>No. DevTune is three.js only. The physics, movement and camera are built on three.js and Rapier directly, so it isn&rsquo;t a port waiting to happen.</p></details>
+      <details><summary>Does it need the internet while I&rsquo;m working?</summary>
+        <p>It installs from npm once. After that the editor runs entirely on your own machine. No account, no cloud, nothing leaves your computer.</p></details>
+      <details><summary>What if a command fails?</summary>
+        <p>The prompt tells your AI to stop and show you the full output instead of working around it. Send me that output.</p></details>
+      <details><summary>Does it work on a game I&rsquo;ve already written?</summary>
+        <p>Partly. Attaching to a finished game, I can usually reach about one number in six. Built with DevTune from the start, I reach all of them. Buy it knowing that.</p></details>
+      <details><summary>Refunds?</summary>
+        <p>[Your policy, one sentence.]</p></details>
+    </div>
+  </section>
+
+</main>
+
+<!-- ══════════════════════════════ RECEIPT ════════════════════════════════ -->
+<main id="receipt">
+  <section>
+    <div class="wrap">
+      <p class="tick">You&rsquo;re in.</p>
+      <p class="dim">Two things below. Copy the key, copy the prompt, paste the prompt into your AI. That&rsquo;s the whole install.</p>
+
+      <h3 style="margin-top:40px">Your key</h3>
+      <div class="keybox" id="keyval">XXXX-XXXX</div>
+      <button class="btn btn-sm" data-copy="#keyval">Copy key</button>
+      <span class="copied" id="c1">copied</span>
+
+      <h3 style="margin-top:44px">The prompt</h3>
+      <div class="copywrap">
+<pre id="paste">You are installing DevTune into this project.
+
+1. Run exactly (the key is a flag — never put it after @ on the package name):
+   npx devtune init --key XXXX-XXXX
+   npx devtune doctor
+
+2. Read the files it wrote under .devtune/ai/ (or print the paths from init).
+3. Build or remould this game so it is born-owned — contracts and packs.
+4. Run: npx devtune verify &amp;&amp; npx devtune smoke &amp;&amp; npx devtune serve --shell
+5. Tell me the local URL. I will edit the game and press K.
+6. If any command fails, stop. Do not work around it.
+   Paste me the full output of the failing command.
+
+Cadence for long builds (hours):
+- After every build chunk: npx devtune verify
+- About every 30–60 minutes: npx devtune verify &amp;&amp; npx devtune smoke
+- Never delete or skip doctor/verify/smoke to stay green
+- Do not add a second physics engine</pre>
+        <button class="btn btn-primary" data-copy="#paste">Copy the prompt</button>
+        <span class="copied" id="c2">copied</span>
+      </div>
+
+      <div class="box" style="margin-top:44px">
+        <h3>Then</h3>
+        <p class="dim" style="margin:0">Open Cursor, Claude Code, Grok or Codex &rarr; start a new agent chat
+          <em>inside your game project</em> &rarr; paste. When it gives you a URL, open it and press <strong>L</strong>.</p>
+      </div>
+
+      <p class="dim" style="margin-top:26px; font-size:13px">
+        Save this page. The same key and prompt are in your email receipt.
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Knotted Studios LLC &middot; three.js only &middot; localhost only &middot; no account, no cloud, no telemetry<br>
+    <a href="#">Terms</a> &middot; <a href="#">Refunds</a> &middot; <a href="mailto:">Contact</a>
+  </div>
+</footer>
+
+
+<script>
+/* Copy buttons.
+ *
+ * Copying the prompt IS the product delivery, so this must never fail quietly.
+ * navigator.clipboard rejects for reasons the buyer cannot see — an unfocused
+ * document, a denied permission, an insecure origin. If it does, we fall back to
+ * execCommand; if that fails too we select the text and SAY SO, so the worst case
+ * is "press Ctrl+C" rather than a button that appears to do nothing. */
+document.querySelectorAll('[data-copy]').forEach(function (btn) {
+  var flag = btn.nextElementSibling;
+  if (!flag || !flag.classList.contains('copied')) flag = null;
+
+  function say(msg, ok) {
+    if (!flag) return;
+    flag.textContent = msg;
+    flag.style.color = ok ? 'var(--accent)' : '#ffd166';
+    flag.classList.add('on');
+    clearTimeout(flag._t);
+    flag._t = setTimeout(function () { flag.classList.remove('on'); }, ok ? 1600 : 5000);
+  }
+
+  function legacyCopy(text, el) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '0';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    if (ok) { say('copied', true); return; }
+    /* Last resort: put the real text under the caret and tell them what to press. */
+    try {
+      var sel = window.getSelection();
+      var range = document.createRange();
+      range.selectNodeContents(el);
+      sel.removeAllRanges();
+      sel.addRange(range);
+      say('selected — press Ctrl+C', false);
+    } catch (e2) {
+      say("couldn't copy — select it and press Ctrl+C", false);
+    }
+  }
+
+  btn.addEventListener('click', function () {
+    var el = document.querySelector(btn.getAttribute('data-copy'));
+    if (!el) return;
+    var text = el.innerText.trim();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(
+        function () { say('copied', true); },
+        function () { legacyCopy(text, el); }
+      );
+    } else {
+      legacyCopy(text, el);
+    }
+  });
+});
+
+/* ── CHECKOUT LINK ──────────────────────────────────────────────────────────
+ * Change this ONE line when the itch project exists, e.g.
+ *   var CHECKOUT = 'https://knottedstudios.itch.io/devtune';
+ * Until then the button says so instead of being a dead click — a Get it
+ * button that silently does nothing is worse than one that admits it isn't
+ * open yet. */
+var CHECKOUT = '';
+
+(function () {
+  var buy = document.getElementById('buy');
+  if (!buy) return;
+  if (CHECKOUT) {
+    buy.setAttribute('href', CHECKOUT);
+    buy.setAttribute('rel', 'noopener');
+  } else {
+    buy.textContent = 'Not on sale yet';
+    buy.setAttribute('aria-disabled', 'true');
+    buy.style.opacity = '.55';
+    buy.style.cursor = 'not-allowed';
+    buy.addEventListener('click', function (e) { e.preventDefault(); });
+  }
+})();
+
+/* Receipt state. Your checkout returns to  /?paid=1&key=ABCD-1234  and this fills it in. */
+var params = new URLSearchParams(location.search);
+if (params.get('paid')) {
+  document.body.classList.add('paid');
+  var key = params.get('key');
+  if (key) {
+    document.getElementById('keyval').textContent = key;
+    var pre = document.getElementById('paste');
+    pre.textContent = pre.textContent.replace('XXXX-XXXX', key);
+  }
+}
+
+</script>
+
+</body>
+</html>
