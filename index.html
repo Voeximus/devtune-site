@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>DevTune — your one-shot built the game. Now make it feel right.</title>
-<meta name="description" content="Your one-shot built the game. DevTune lets you edit it while it runs and press K to write every change into your source. For AI-built three.js games.">
-<meta property="og:title" content="DevTune — your one-shot built the game. Now make it feel right.">
-<meta property="og:description" content="Stop re-prompting to fix feel. Edit the running game with your hands, press K, and it is written into your source. For AI-built three.js games.">
+<title>DevTune — tune your game's feel for zero tokens</title>
+<meta name="description" content="Your one-shot built the game. Tuning how it feels costs you zero tokens — drag it in the running game, press K, and it is written into your source. For AI-built three.js games.">
+<meta property="og:title" content="DevTune — tune the feel, spend zero tokens">
+<meta property="og:description" content="Nudging feel through an agent is a full read-reason-rewrite every time. Dragging a slider is free. For prompt-built three.js games.">
 <style>
 /* ─────────────────────────────────────────────────────────────────────────────
    DevTune store. Arcade cabinet: black, white, one accent, hard edges.
@@ -188,7 +188,7 @@ footer a{color:var(--dim)}
     </span>
     <nav class="nav">
       <a href="#how" class="hide-sm">How</a>
-      <a href="#keys" class="hide-sm">Keys</a>
+      <a href="#budget" class="hide-sm">Tokens</a>
       <span class="price">$1.99</span>
       <a href="#get" class="btn btn-sm btn-primary">Get it</a>
     </nav>
@@ -201,17 +201,20 @@ footer a{color:var(--dim)}
   <section class="hero">
     <div class="wrap">
       <p class="eyebrow">1 player · made by Gino · for AI-built three.js games</p>
-      <h1>Your one-shot built<br>the game. Now make<br>it feel right.</h1>
+      <h1>Tune the feel.<br>Spend zero tokens.</h1>
 
-      <p>The prompt gets you a game that <em>runs</em>. It doesn&rsquo;t get you a game that feels good &mdash;
-         and going back to fix the feel is a lottery that changes three things you didn&rsquo;t ask about.</p>
+      <p>Your one-shot gets you a game that <em>runs</em>. It doesn&rsquo;t get you a game that feels good.
+         Feel takes dozens of passes &mdash; jump a little floatier, camera a little tighter, gravity
+         a touch heavier &mdash; and every one of those passes through your agent burns context re-reading
+         your files, reasoning about them, and rewriting them. Then it changes something you were happy with.</p>
 
-      <p><strong>So stop re-prompting.</strong> Play the game, press <strong>L</strong>, and edit it while it&rsquo;s
-         running. Then press <strong>K</strong> and every change is written into your source code, on the lines
-         it came from.</p>
+      <p><strong>Tuning is the worst possible job for an agent</strong> and the best possible job for your hands.
+         Press <strong>L</strong>, drag the number, watch the game change on the same frame. Press <strong>K</strong>
+         and it&rsquo;s written into your source, on the line it came from.</p>
 
       <p class="dim">Made by one person &mdash; hi, I&rsquo;m Gino. Your agent still builds the thing.
-         DevTune is what you use after it hands the game back.</p>
+         DevTune is what you use after it hands the game back, so your token budget goes into
+         <em>building</em> instead of into <em>nudging</em>.</p>
 
       <div class="btn-row">
         <a href="#get" class="btn btn-primary">Get it &mdash; $1.99</a>
@@ -228,14 +231,14 @@ footer a{color:var(--dim)}
 
       <div class="stats">
         <div class="stat">
-          <div class="stat-label">Re-prompts to fix feel</div>
+          <div class="stat-label">Tokens to tune</div>
           <div class="stat-value">0</div>
-          <div class="stat-note">You change it with your hands. The agent never touches it again.</div>
+          <div class="stat-note">Dragging a slider does not call a model. Tune all night for nothing.</div>
         </div>
         <div class="stat">
-          <div class="stat-label">Commands</div>
+          <div class="stat-label">Re-prompts for feel</div>
           <div class="stat-value">0</div>
-          <div class="stat-note">You never run one yourself &mdash; your AI does</div>
+          <div class="stat-note">Nothing you were happy with gets rewritten behind your back</div>
         </div>
         <div class="stat">
           <div class="stat-label">Accounts</div>
@@ -270,6 +273,43 @@ footer a{color:var(--dim)}
           <h3>Take over</h3>
           <p>It hands you a URL. From here the agent is done. Press <strong>L</strong>, click anything, move it, tune it, press <strong>K</strong>. Reload &mdash; it held.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="budget">
+    <div class="wrap">
+      <h2>Where your tokens should go</h2>
+      <p class="dim">Prompt-built games have a budget problem nobody talks about: the cheap-to-describe
+        work and the expensive-to-describe work cost the same to ask for.</p>
+
+      <div class="steps">
+        <div class="step">
+          <h3 style="color:var(--accent)">Worth every token</h3>
+          <p><strong>Building.</strong> Systems, levels, enemies, a scoring loop, the thing that didn&rsquo;t
+            exist an hour ago. Describing it once and getting a working version back is what your agent is
+            extraordinary at. Spend here.</p>
+        </div>
+        <div class="step">
+          <h3 style="color:#ff9d9d">Burning tokens</h3>
+          <p><strong>Nudging.</strong> &ldquo;A bit floatier.&rdquo; &ldquo;Slightly tighter.&rdquo;
+            &ldquo;Not that much.&rdquo; Each one is a full read-reason-rewrite of files that were already
+            correct, to move a number you could have dragged &mdash; and it can only guess what
+            <em>a bit</em> meant.</p>
+        </div>
+        <div class="step">
+          <h3>The split</h3>
+          <p>Let the agent do the first job. Do the second one yourself, for free, with the game running
+            in front of you. That&rsquo;s the whole product.</p>
+        </div>
+      </div>
+
+      <div class="box" style="margin-top:34px">
+        <p style="margin:0"><strong>Why nudging is the expensive kind.</strong> You cannot say a feel
+          in words. You know it when you see it, which means you find it by moving the number and looking
+          &mdash; twenty, fifty times. That loop is nearly free at a slider and costs a full agent round trip
+          at a prompt. DevTune doesn&rsquo;t make your agent cheaper. It takes the one job that never
+          belonged in the prompt out of the prompt.</p>
       </div>
     </div>
   </section>
