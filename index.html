@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>DevTune — tune your game's feel for zero tokens</title>
-<meta name="description" content="Your one-shot built the game. Tuning how it feels costs you zero tokens — drag it in the running game, press K, and it is written into your source. For AI-built three.js games.">
-<meta property="og:title" content="DevTune — tune the feel, spend zero tokens">
-<meta property="og:description" content="Nudging feel through an agent is a full read-reason-rewrite every time. Dragging a slider is free. For prompt-built three.js games.">
+<title>DevTune — your AI is building in open space</title>
+<meta name="description" content="Your AI can write a three.js game. It cannot write a medium to write it in. DevTune is the floor — physics, movement, camera, and every number addressed to its own line of your source.">
+<meta property="og:title" content="DevTune — your AI is building in open space">
+<meta property="og:description" content="Every one-shot starts from nothing and reinvents the floor. DevTune is the floor, and everything your agent builds into it is tunable the moment it exists.">
 <style>
 /* ─────────────────────────────────────────────────────────────────────────────
    DevTune store. Arcade cabinet: black, white, one accent, hard edges.
@@ -85,6 +85,56 @@ header{
 section{padding:clamp(48px,7vw,92px) 0; border-bottom:3px solid #262626}
 section:last-of-type{border-bottom:0}
 .hero{padding-top:clamp(40px,6vw,76px)}
+
+/* ── the one screen ───────────────────────────────────────────────────────────
+   ⚠️ MEASURED, NOT EYEBALLED. The brief is that the pitch and the buy button land without
+   scrolling. First pass put the CTA at 1032px on a 900px-tall window — below the fold, which is
+   the one thing the page must not do. Every number below is set so the stack and the CTA clear
+   a 800px viewport; re-measure if any of them change. */
+.hero{padding-top:clamp(16px,1.8vw,26px) !important; padding-bottom:clamp(28px,4vw,56px)}
+.hero .eyebrow{margin:0 0 11px}
+.hero h1{font-size:clamp(28px,4vw,52px); margin:0 0 13px; line-height:1.04}
+.lede{font-size:clamp(14px,.5vw + 11px,16px); max-width:62ch; margin:0 0 4px}
+.lede em{font-style:normal; color:var(--accent)}
+
+/* The whole product, one row each. A feature list nobody scrolls is a feature list
+   nobody reads — this is every core feature in a phrase, on one screen. */
+.stack{border:3px solid var(--line); margin:18px 0 0}
+.stack .row{display:flex; gap:0; border-bottom:1px solid #262626; align-items:stretch}
+.stack .row:last-child{border-bottom:0}
+.row-k{
+  flex:0 0 clamp(92px,15vw,150px);
+  padding:8px 13px;
+  font-family:var(--font-display); text-transform:uppercase; letter-spacing:.1em;
+  font-size:clamp(10px,.5vw + 7px,11px); font-weight:800;
+  border-right:1px solid #262626; color:var(--ink);
+  display:flex; align-items:center;
+}
+.row-v{padding:8px 13px; font-size:clamp(12px,.35vw + 11px,14px); color:var(--dim); line-height:1.45}
+.row-v b{color:var(--ink); font-weight:800}
+.row-v code{font-family:var(--font-body); color:var(--accent); font-size:.92em}
+/* ⚠️ DO NOT STACK THESE ON MOBILE. Breaking each row into two lines doubled the block's height —
+   987px on a 375×812 phone — and pushed the buy button off the first screen, which is the one
+   thing this layout exists to prevent. The labels are one short word; they stay in their column. */
+@media (max-width:560px){
+  .row-k{flex:0 0 84px; padding:7px 9px; font-size:9px; letter-spacing:.06em}
+  .row-v{padding:7px 10px; font-size:12px; line-height:1.4}
+}
+
+.hero .btn-row{margin:15px 0 0}
+.hero .btn{padding:12px 24px; box-shadow:6px 6px 0 #444}
+.btn-note{font-size:12px; color:var(--dim); align-self:center; max-width:32ch; line-height:1.4}
+.hero .stats{margin-top:15px}
+.hero .stat{padding:10px 15px}
+.hero .stat-label{font-size:10px; margin-bottom:5px}
+.hero .stat-value{font-size:clamp(16px,1.5vw,22px)}
+.hero .stat-note{font-size:11px; margin-top:5px; line-height:1.4}
+.shot{
+  border:3px solid var(--line); margin-top:22px; aspect-ratio:16/9;
+  display:flex; align-items:center; justify-content:center; text-align:center; padding:20px;
+}
+.shot span{font-size:12px; color:var(--dim); letter-spacing:.06em}
+.foot-note{margin-top:18px; font-size:12px}
 
 /* ── stat cabinet ─────────────────────────────────────────────────────────── */
 .stats{
@@ -187,11 +237,11 @@ footer a{color:var(--dim)}
       DevTune
     </span>
     <nav class="nav">
-      <a href="#how" class="hide-sm">How</a>
-      <a href="#budget" class="hide-sm">Tokens</a>
-      <a href="#stack" class="hide-sm">Why it works</a>
+      <!-- ⚠️ No section links. The page is one screen — a nav that scrolls you 40px is noise, and
+           every anchor those links used to point at was deleted with the long sections. -->
+      <a href="#faq" class="hide-sm">Questions</a>
       <span class="price">$2.99</span>
-      <a href="#get" class="btn btn-sm btn-primary">Get it</a>
+      <a href="#buy" class="btn btn-sm btn-primary">Get it</a>
     </nav>
   </div>
 </header>
@@ -199,52 +249,49 @@ footer a{color:var(--dim)}
 <!-- ══════════════════════════════ SALES ══════════════════════════════════ -->
 <main id="sales">
 
+  <!-- ⭐ ONE SCREEN. Everything that sells this is above the fold; the only thing below it is the
+       FAQ, which exists to prevent refunds rather than to persuade. A buyer at $2.99 decides in
+       seconds — a long page is a page they scroll past, not a page they read. -->
   <section class="hero">
     <div class="wrap">
-      <p class="eyebrow">1 player · made by Gino · for AI-built three.js games</p>
-      <h1>Tune the feel.<br>Spend zero tokens.</h1>
+      <p class="eyebrow">for AI-built three.js games · localhost · $2.99</p>
+      <h1>Your AI is building<br>in open space.</h1>
 
-      <p>Your one-shot gets you a game that <em>runs</em>. It doesn&rsquo;t get you a game that feels good.
-         Feel takes dozens of passes &mdash; jump a little floatier, camera a little tighter, gravity
-         a touch heavier &mdash; and every one of those passes through your agent burns context re-reading
-         your files, reasoning about them, and rewriting them. Then it changes something you were happy with.</p>
+      <p class="lede">It can write a game. It can&rsquo;t write a <em>medium</em> to write it in &mdash; so every
+        one-shot starts from nothing and reinvents the floor. DevTune is the floor. Your agent
+        builds into it, and everything it makes is tunable the moment it exists.</p>
 
-      <p><strong>Tuning is the worst possible job for an agent</strong> and the best possible job for your hands.
-         Press <strong>C</strong>, drag the number, watch the game change on the same frame. Press <strong>K</strong>
-         and it&rsquo;s written into your source, on the line it came from.</p>
-
-      <p class="dim">Made by one person &mdash; hi, I&rsquo;m Gino. Your agent still builds the thing.
-         DevTune is what you use after it hands the game back, so your token budget goes into
-         <em>building</em> instead of into <em>nudging</em>.</p>
-
-      <div class="btn-row">
-        <a href="#get" class="btn btn-primary">Get it &mdash; $2.99</a>
-        <a href="#how" class="btn">How it works</a>
+      <!-- The whole product, one line each. -->
+      <div class="stack">
+        <div class="row"><span class="row-k">Physics</span><span class="row-v">Rapier, already right. Contacts honest, collision shapes matching the art.</span></div>
+        <div class="row"><span class="row-k">Movement</span><span class="row-v">A character controller your agent doesn&rsquo;t have to invent at 2am.</span></div>
+        <div class="row"><span class="row-k">Camera</span><span class="row-v">A follow camera that already works.</span></div>
+        <div class="row"><span class="row-k">Addresses</span><span class="row-v">Every number knows its own line &mdash; <code>src/world.js:count</code>. This is the part nobody else has.</span></div>
+        <div class="row"><span class="row-k">Gates</span><span class="row-v">Verify, smoke and doctor. Your agent can&rsquo;t call it done; they decide.</span></div>
+        <div class="row"><span class="row-k">The desk</span><span class="row-v">Press <b>C</b> mid-game. Click anything, move it, drag its numbers. Nothing restarts.</span></div>
+        <div class="row"><span class="row-k">Save</span><span class="row-v">Press <b>K</b>. It&rsquo;s written into your real source, on the line it came from.</span></div>
       </div>
 
-      <!-- Replace with the real capture: game on top, source file below, one unbroken take. -->
-      <div class="box" style="margin-top:44px; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; text-align:center">
-        <span class="dim" style="font-size:12px; letter-spacing:.2em; text-transform:uppercase">
-          [ screen capture goes here ]<br><br>
-          <span style="letter-spacing:.05em; text-transform:none">game running above &middot; source file below &middot; K lands and the number changes</span>
-        </span>
+      <div class="btn-row">
+        <a href="#" class="btn btn-primary" id="buy">Get it &mdash; $2.99</a>
+        <span class="btn-note">One prompt. Your AI installs it. You never open a terminal.</span>
       </div>
 
       <div class="stats">
         <div class="stat">
           <div class="stat-label">Tokens to tune</div>
           <div class="stat-value">0</div>
-          <div class="stat-note">Dragging a slider does not call a model. Tune all night for nothing.</div>
+          <div class="stat-note">Dragging a slider doesn&rsquo;t call a model</div>
         </div>
         <div class="stat">
           <div class="stat-label">Re-prompts for feel</div>
           <div class="stat-value">0</div>
-          <div class="stat-note">Nothing you were happy with gets rewritten behind your back</div>
+          <div class="stat-note">Nothing you liked gets rewritten behind your back</div>
         </div>
         <div class="stat">
           <div class="stat-label">Accounts</div>
           <div class="stat-value">0</div>
-          <div class="stat-note">No sign-up, no login, no licence server phoning home</div>
+          <div class="stat-note">No sign-up, no licence server phoning home</div>
         </div>
         <div class="stat">
           <div class="stat-label">Uploads</div>
@@ -252,166 +299,19 @@ footer a{color:var(--dim)}
           <div class="stat-note">Nothing leaves your computer</div>
         </div>
       </div>
+
+      <!-- Replace with the real capture: game above, source file below, one unbroken take. -->
+      <div class="shot">
+        <span>[ screen capture &mdash; drag a dial, press K, watch the number change in the file ]</span>
+      </div>
+
+      <p class="foot-note dim">Made by one person &mdash; hi, I&rsquo;m Gino. three.js only, not Unity or Godot.
+        Works with Cursor, Claude Code, Grok and Codex &mdash; same paste.</p>
     </div>
   </section>
 
-  <section id="how">
-    <div class="wrap">
-      <h2>How it works</h2>
-      <div class="steps">
-        <div class="step">
-          <div class="step-n">1</div>
-          <h3>Paste, once</h3>
-          <p>One block into Cursor, Claude Code, Grok or Codex. Not a zip, not a wizard. You never open a terminal.</p>
-        </div>
-        <div class="step">
-          <div class="step-n">2</div>
-          <h3>Let it one-shot</h3>
-          <p>Your agent builds the game with DevTune in it &mdash; physics, movement and camera already written, so it&rsquo;s not reinventing them at 2am and getting them subtly wrong.</p>
-        </div>
-        <div class="step">
-          <div class="step-n">3</div>
-          <h3>Take over</h3>
-          <p>It hands you a URL. From here the agent is done. Press <strong>C</strong>, click anything, move it, tune it, press <strong>K</strong>. Reload &mdash; it held.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="budget">
-    <div class="wrap">
-      <h2>Where your tokens should go</h2>
-      <p class="dim">Prompt-built games have a budget problem nobody talks about: the cheap-to-describe
-        work and the expensive-to-describe work cost the same to ask for.</p>
-
-      <div class="steps">
-        <div class="step">
-          <h3 style="color:var(--accent)">Worth every token</h3>
-          <p><strong>Building.</strong> Systems, levels, enemies, a scoring loop, the thing that didn&rsquo;t
-            exist an hour ago. Describing it once and getting a working version back is what your agent is
-            extraordinary at. Spend here.</p>
-        </div>
-        <div class="step">
-          <h3 style="color:#ff9d9d">Burning tokens</h3>
-          <p><strong>Nudging.</strong> &ldquo;A bit floatier.&rdquo; &ldquo;Slightly tighter.&rdquo;
-            &ldquo;Not that much.&rdquo; Each one is a full read-reason-rewrite of files that were already
-            correct, to move a number you could have dragged &mdash; and it can only guess what
-            <em>a bit</em> meant.</p>
-        </div>
-        <div class="step">
-          <h3>The split</h3>
-          <p>Let the agent do the first job. Do the second one yourself, for free, with the game running
-            in front of you. That&rsquo;s the whole product.</p>
-        </div>
-      </div>
-
-      <div class="box" style="margin-top:34px">
-        <p style="margin:0"><strong>Why nudging is the expensive kind.</strong> You cannot say a feel
-          in words. You know it when you see it, which means you find it by moving the number and looking
-          &mdash; twenty, fifty times. That loop is nearly free at a slider and costs a full agent round trip
-          at a prompt. DevTune doesn&rsquo;t make your agent cheaper. It takes the one job that never
-          belonged in the prompt out of the prompt.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="stack">
-    <div class="wrap">
-      <h2>Every dial knows where it lives</h2>
-      <p>This is the part that makes the rest possible, and it&rsquo;s the part no other tuning panel has.</p>
-
-      <p>When your agent builds the game, it writes each group of numbers through DevTune. That does one
-        thing that sounds small and isn&rsquo;t: <strong>it records the address.</strong> Every control on
-        the desk carries the file and the name of the line its number came from.</p>
-
-<pre>  Sprint mul     1.35        src/player.js:sprintMul
-  Land bob       0.12        src/player.js:landBob
-  Respawn height 0.40        src/player.js:respawnHeight</pre>
-
-      <p class="dim" style="margin-top:18px">That right-hand column is the whole product. It is why
-        <strong>K</strong> can put 1.42 back into your file on the correct line instead of guessing, and why
-        it stays there when you reload.</p>
-
-      <div class="box" style="margin-top:34px">
-        <h3>Why everyone else stops at the dial</h3>
-        <p class="dim" style="margin:0">lil-gui, Tweakpane, leva and Theatre.js all hand you a slider bound
-          to a variable in memory. Nothing in that chain ever knew which line of which file the number came
-          from &mdash; so when you close the tab it&rsquo;s gone, and the only way back is to read the number
-          off the screen and type it in yourself. They aren&rsquo;t missing a feature. They&rsquo;re missing
-          the address, and you can&rsquo;t add it afterwards.</p>
-      </div>
-
-      <div class="box">
-        <h3>What that buys your agent</h3>
-        <p class="dim" style="margin:0">Because the addresses exist, so does everything built on them:
-          <strong>physics, movement and camera already written</strong> so your one-shot spends its context on
-          your game instead of a character controller &mdash; and <strong>checks that fail closed</strong>, so
-          your agent can&rsquo;t announce it&rsquo;s finished. Verify, smoke and doctor decide, and a red gate
-          stops it rather than letting it quietly work around the problem.</p>
-      </div>
-
-      <p class="dim" style="margin-top:26px; font-size:13px">
-        Attaching this to a game that&rsquo;s already written reaches about one number in six &mdash; the
-        addresses were never recorded, so they have to be guessed at. Written in from the first prompt, it
-        reaches all of them. That gap is the reason DevTune is something your agent builds <em>with</em>,
-        not something you bolt on at the end.
-      </p>
-    </div>
-  </section>
-
-  <section id="keys">
-    <div class="wrap">
-      <h2>What you can do without asking the agent</h2>
-      <p class="dim">The game keeps playing the whole time. Nothing restarts, nothing rebuilds, nothing regenerates.</p>
-      <div class="keys">
-        <div class="keyrow"><kbd>C</kbd><span>Open the editor over the running game</span></div>
-        <div class="keyrow"><kbd>Click</kbd><span>Select any object. Shift-click for several.</span></div>
-        <div class="keyrow"><kbd>Drag</kbd><span>Move it where it should have been</span></div>
-        <div class="keyrow"><kbd>G</kbd><span>Switch the handles: move, rotate, scale</span></div>
-        <div class="keyrow"><kbd>Z</kbd><span>Fly to what you selected</span></div>
-        <div class="keyrow"><kbd>F</kbd><span>Let it run again &mdash; the world freezes when you enter</span></div>
-        <div class="keyrow"><kbd>Tab</kbd><span>Swap between flying the camera and moving the player</span></div>
-        <div class="keyrow"><kbd>X</kbd><span>Lock things you don&rsquo;t want touched</span></div>
-        <div class="keyrow"><kbd>/</kbd><span>Search when the list gets long</span></div>
-        <div class="keyrow"><kbd>K</kbd><span>Write it all into your source files</span></div>
-        <div class="keyrow"><kbd>P</kbd><span>Back to playing</span></div>
-        <div class="keyrow"><kbd>?</kbd><span>Every key, and rebind any of them</span></div>
-      </div>
-
-      <div class="box" style="margin-top:34px">
-        <h3>Honest about what it can&rsquo;t do</h3>
-        <p class="dim" style="margin:0">Every control has a real minimum and maximum, set by whoever wrote that line &mdash;
-          nothing is guessed. If a number won&rsquo;t take effect until the next spawn or the next wave,
-          the control says so instead of pretending it changed. And <strong>Panic</strong> puts the running
-          game back to exactly what your source says, without writing anything.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="get">
-    <div class="wrap">
-      <h2>What you get for $2.99</h2>
-      <div class="box">
-        <ul class="plain">
-          <li><strong>A key and the prompt</strong> &mdash; paste it into your agent and you&rsquo;re installed</li>
-          <li><strong>The editor</strong> &mdash; select, move, solidify and tune objects in the running game</li>
-          <li><strong>Keep</strong> &mdash; your numbers, toggles and moved positions written into your real source files</li>
-          <li><strong>Physics, movement and camera</strong> &mdash; already written, so your one-shot spends its context on <em>your game</em> instead of rebuilding a character controller</li>
-          <li><strong>Checks that fail closed</strong> &mdash; your agent can&rsquo;t announce it&rsquo;s finished; verify, smoke and doctor decide, and a failure stops it instead of hiding it</li>
-        </ul>
-      </div>
-
-      <div class="btn-row">
-        <!-- Point this at your hosted checkout. Success URL should return to /?paid=1 with the key. -->
-        <a href="#" class="btn btn-primary" id="buy">Get it &mdash; $2.99</a>
-      </div>
-      <p class="dim" style="margin-top:18px; font-size:13px">
-        One payment. Works across your projects. Same paste for Cursor, Claude Code, Grok or Codex.
-      </p>
-    </div>
-  </section>
-
-  <section>
+  <!-- The only thing below the fold. It exists to prevent refunds, not to persuade. -->
+  <section id="faq">
     <div class="wrap">
       <h2>Questions</h2>
       <details><summary>Do I install anything myself?</summary>
