@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>DevTune — your AI is building in open space</title>
-<meta name="description" content="Your AI can write a three.js game. It cannot write a medium to write it in. DevTune is the floor — physics, movement, camera, and every number addressed to its own line of your source.">
-<meta property="og:title" content="DevTune — your AI is building in open space">
-<meta property="og:description" content="Every one-shot starts from nothing and reinvents the floor. DevTune is the floor, and everything your agent builds into it is tunable the moment it exists.">
+<title>DevTune — a three.js editor for the game your AI wrote</title>
+<meta name="description" content="v1 beta. Your agent can one-shot a three.js game; it cannot tune one without burning tokens on every pass at feel. DevTune gives you the dials directly — change the number, press K, and it is written back into your real source file.">
+<meta property="og:title" content="DevTune — a three.js editor for the game your AI wrote">
+<meta property="og:description" content="Fine-tuning control for AI-built three.js games. Drag the dial, press K, the number lands on its own line in your source. No tokens, no re-prompt, no account. v1 beta, $2.99.">
 <style>
 /* ─────────────────────────────────────────────────────────────────────────────
    DevTune store. Arcade cabinet: black, white, one accent, hard edges.
@@ -183,6 +183,34 @@ kbd{
 /* ── get / boxes ──────────────────────────────────────────────────────────── */
 .box{border:3px solid var(--line); padding:clamp(20px,3vw,32px)}
 .box + .box{margin-top:18px}
+
+/* ── beta + feedback ──────────────────────────────────────────────────────────
+   The badge is stated, not decorated. A buyer needs to know this is v1 before
+   they pay, and the feedback box is the most useful thing on a beta page — so
+   both get real weight instead of footer-grey. */
+.beta{
+  display:inline-block; background:var(--accent); color:#0a0a0a;
+  font-family:var(--font-display); font-weight:800; font-size:11px;
+  letter-spacing:.12em; text-transform:uppercase; padding:3px 8px; margin-right:8px;
+}
+#beta, #feedback{padding:0 0 26px}
+#beta .wrap, #feedback .wrap{padding-top:0; padding-bottom:0}
+.beta-box h3, .feedback-box h3{
+  margin:0 0 12px; font-family:var(--font-display); text-transform:uppercase;
+  letter-spacing:.06em; font-size:15px; font-weight:800;
+}
+.beta-box p, .feedback-box p{font-size:14px; margin:0 0 12px}
+.feedback-box{border-color:var(--accent)}
+.feedback-box .btn-row{margin-top:18px}
+/* ⚠️ MEASURED ON 375×812. The badge makes the eyebrow taller and the buy button has to stay on
+   the first screen — that is the one thing this layout exists to protect. Re-measure if the
+   eyebrow or the lede changes again. */
+@media (max-width:560px){
+  .hero .eyebrow{letter-spacing:.14em; margin:0 0 8px}
+  .beta{font-size:10px; padding:2px 6px; margin-right:6px}
+  .lede{line-height:1.5}
+  .feedback-box .btn-row{margin-top:14px}
+}
 ul.plain{list-style:none; padding:0; margin:0}
 ul.plain li{padding:11px 0 11px 24px; border-bottom:1px solid #262626; position:relative; font-size:14px}
 ul.plain li:last-child{border-bottom:0}
@@ -239,6 +267,7 @@ footer a{color:var(--dim)}
     <nav class="nav">
       <!-- ⚠️ No section links. The page is one screen — a nav that scrolls you 40px is noise, and
            every anchor those links used to point at was deleted with the long sections. -->
+      <a href="#feedback" class="hide-sm">Feedback</a>
       <a href="#faq" class="hide-sm">Questions</a>
       <span class="price">$2.99</span>
       <a href="#buy" class="btn btn-sm btn-primary">Get it</a>
@@ -254,12 +283,12 @@ footer a{color:var(--dim)}
        seconds — a long page is a page they scroll past, not a page they read. -->
   <section class="hero">
     <div class="wrap">
-      <p class="eyebrow">for AI-built three.js games · localhost · $2.99</p>
-      <h1>Your AI is building<br>in open space.</h1>
+      <p class="eyebrow"><span class="beta">v1 beta</span> three.js editor + substrate · $2.99</p>
+      <h1>An editor for the<br>game your AI wrote.</h1>
 
-      <p class="lede">It can write a game. It can&rsquo;t write a <em>medium</em> to write it in &mdash; so every
-        one-shot starts from nothing and reinvents the floor. DevTune is the floor. Your agent
-        builds into it, and everything it makes is tunable the moment it exists.</p>
+      <p class="lede">Your agent can one-shot a three.js game. It can&rsquo;t <em>tune</em> one &mdash; every pass at feel
+        is another prompt, a few thousand more tokens, and a rewrite of something you already liked.
+        DevTune hands you the dials: change the number, press <b>K</b>, it lands in your real source.</p>
 
       <!-- The whole product, one line each. -->
       <div class="stack">
@@ -300,13 +329,45 @@ footer a{color:var(--dim)}
         </div>
       </div>
 
-      <!-- Replace with the real capture: game above, source file below, one unbroken take. -->
-      <div class="shot">
-        <span>[ screen capture &mdash; drag a dial, press K, watch the number change in the file ]</span>
-      </div>
-
       <p class="foot-note dim">Made by one person &mdash; hi, I&rsquo;m Gino. three.js only, not Unity or Godot.
         Works with Cursor, Claude Code, Grok and Codex &mdash; same paste.</p>
+    </div>
+  </section>
+
+  <!-- ⭐ SAID PLAINLY, ABOVE THE FAQ. This is a v1 beta and the page says so where a buyer will
+       actually read it, not in small print after the money. Stating it costs a few sales and
+       prevents every refund that would have started with "I thought this was finished." -->
+  <section id="beta">
+    <div class="wrap">
+      <div class="box beta-box">
+        <h3><span class="beta">v1 beta</span> &nbsp;What that means, exactly</h3>
+        <p class="dim">This is version 1 of a three.js editor and substrate built by one person, and it is
+          still moving. Updates ship as they land &mdash; you get them with <code>npx devtune@latest</code>,
+          at no extra cost, forever. There is no subscription and no upgrade price.</p>
+        <p class="dim" style="margin-bottom:0">What already works is listed above and is what you are paying for.
+          What&rsquo;s next is decided largely by the box below.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⭐ THE FEEDBACK BOX, AND IT IS NOT IN THE FOOTER. Asked for by name: an obvious place to
+       report what's broken and ask for what's missing. On a beta this is the most valuable thing
+       on the page, so it gets a section and a primary button rather than a grey link at the bottom. -->
+  <section id="feedback">
+    <div class="wrap">
+      <div class="box feedback-box">
+        <h3>Found a bug? Want something it doesn&rsquo;t do?</h3>
+        <p class="dim">Tell me. I read every one of these and they set what gets built next &mdash; most of
+          what shipped this month came straight out of somebody using it and saying what was wrong.
+          You don&rsquo;t need to own it to send one.</p>
+        <div class="btn-row">
+          <a href="#" class="btn btn-primary" id="feedback-link">Send feedback</a>
+          <a href="#" class="btn" id="feedback-alt">Request a feature</a>
+        </div>
+        <p class="btn-note" id="feedback-note" style="margin-top:14px">
+          Bugs: what you did, what you expected, what happened. Raw is fine.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -330,8 +391,20 @@ footer a{color:var(--dim)}
         <p>No. The prompt gives it everything &mdash; the rules, the packs, the checks. It reads them at install. Nothing to learn, nothing to configure, no MCP server to wire up.</p></details>
       <details><summary>Can I still ask the agent for changes afterwards?</summary>
         <p>Yes. DevTune isn&rsquo;t a lock on your code &mdash; it&rsquo;s ordinary source files your agent can keep editing. What it removes is the need to re-prompt for <em>feel</em>, which is the round trip that keeps breaking things you were happy with.</p></details>
+      <details><summary>It says v1 beta &mdash; what&rsquo;s missing?</summary>
+        <p>Nothing that&rsquo;s listed on this page &mdash; everything above works today and is what you&rsquo;re
+          paying for. Beta means it&rsquo;s one person&rsquo;s version 1 and it&rsquo;s still moving: rough edges get
+          found and fixed weekly, and the roadmap is set mostly by what buyers report. If you want a
+          finished, frozen tool, wait a few months. If you want to shape one, now is the useful time.</p></details>
+      <details><summary>Do updates cost extra?</summary>
+        <p>No. <code>npx devtune@latest</code> and you have the newest one. No subscription, no upgrade
+          price, no version you get locked out of. You bought the tool, not a year of it.</p></details>
+      <details><summary>How do I report a bug or ask for a feature?</summary>
+        <p>The box above the questions &mdash; it&rsquo;s the fastest way to reach me and I read all of it.
+          For a bug, the useful three lines are: what you did, what you expected, what happened.</p></details>
       <details><summary>Refunds?</summary>
-        <p>[Your policy, one sentence.]</p></details>
+        <p>Yes, for any reason. Message me on the project page within 14 days and I&rsquo;ll refund it &mdash;
+          no questions, no form. It&rsquo;s a v1 beta at $2.99; if it isn&rsquo;t for you, it isn&rsquo;t for you.</p></details>
     </div>
   </section>
 
@@ -388,8 +461,8 @@ Cadence for long builds (hours):
 
 <footer>
   <div class="wrap">
-    Knotted Studios LLC &middot; three.js only &middot; localhost only &middot; no account, no cloud, no telemetry<br>
-    <a href="#">Terms</a> &middot; <a href="#">Refunds</a> &middot; <a href="mailto:">Contact</a>
+    Knotted Studios LLC &middot; v1 beta &middot; three.js only &middot; localhost only &middot; no account, no cloud, no telemetry<br>
+    <a href="#feedback">Feedback</a> &middot; <a href="#">Terms</a> &middot; <a href="#">Refunds</a>
   </div>
 </footer>
 
@@ -457,13 +530,19 @@ document.querySelectorAll('[data-copy]').forEach(function (btn) {
   });
 });
 
-/* ── CHECKOUT LINK ──────────────────────────────────────────────────────────
- * Change this ONE line when the itch project exists, e.g.
+/* ══════════════════════════════════════════════════════════════════════════
+ * ⭐⭐ THE ONE LINE. This is the only thing on this page that needs a human.
+ *
+ * Paste the itch project URL here and the page goes live: the Get it button,
+ * the Send feedback button and the Request a feature button all derive from
+ * it, and the red NOT READY bar disappears.
+ *
  *   var CHECKOUT = 'https://knottedstudios.itch.io/devtune';
- * Until then the button says so instead of being a dead click — a Get it
- * button that silently does nothing is worse than one that admits it isn't
- * open yet. */
-var CHECKOUT = '';
+ *
+ * Until then the buttons SAY they are not open rather than being dead clicks —
+ * a Get it button that silently does nothing is worse than one that admits it.
+ * ══════════════════════════════════════════════════════════════════════════ */
+var CHECKOUT = 'https://knottedstudios.itch.io/devtune';
 
 (function () {
   var buy = document.getElementById('buy');
@@ -478,6 +557,69 @@ var CHECKOUT = '';
     buy.style.cursor = 'not-allowed';
     buy.addEventListener('click', function (e) { e.preventDefault(); });
   }
+})();
+
+/* ── FEEDBACK DESTINATION ───────────────────────────────────────────────────
+ * ⭐ DERIVED FROM CHECKOUT, so there is only ONE line on this page to set.
+ *
+ * Feedback goes to the itch project's own community board: it comes free with
+ * the project, buyers are already signed in there, and the threads are public —
+ * which doubles as proof the tool is being maintained.
+ *
+ * That board lives at <project URL>#community, so the moment CHECKOUT is set
+ * these come alive too. Override below only if you move feedback elsewhere. */
+var FEEDBACK = CHECKOUT ? CHECKOUT.replace(/\/+$/, '') + '#community' : '';
+var FEEDBACK_FEATURE = '';
+
+(function () {
+  var main = document.getElementById('feedback-link');
+  var alt = document.getElementById('feedback-alt');
+  var note = document.getElementById('feedback-note');
+  if (!main || !alt) return;
+
+  if (!FEEDBACK) {
+    [main, alt].forEach(function (b) {
+      b.textContent = 'Feedback link not set yet';
+      b.setAttribute('aria-disabled', 'true');
+      b.style.opacity = '.55';
+      b.style.cursor = 'not-allowed';
+      b.addEventListener('click', function (e) { e.preventDefault(); });
+    });
+    alt.style.display = 'none';
+    if (note) note.textContent = 'Set FEEDBACK in this page’s script to switch these on.';
+    return;
+  }
+
+  main.setAttribute('href', FEEDBACK);
+  main.setAttribute('rel', 'noopener');
+  alt.setAttribute('href', FEEDBACK_FEATURE || FEEDBACK);
+  alt.setAttribute('rel', 'noopener');
+  if (FEEDBACK.indexOf('mailto:') !== 0) {
+    main.setAttribute('target', '_blank');
+    alt.setAttribute('target', '_blank');
+  }
+})();
+
+/* ── SHIP CHECK ───────────────────────────────────────────────────────────────
+ * ⭐ THE PAGE REFUSES TO LOOK FINISHED WHILE IT IS NOT.
+ *
+ * Four things on this page need a human decision — the checkout link, the feedback
+ * link, the refund sentence and the support email in the download. Each was a
+ * bracketed placeholder, and a bracketed placeholder is exactly the kind of thing
+ * that survives to launch day because it reads as text rather than as a hole.
+ *
+ * This puts a bar across the top of the page naming every one that is still unset.
+ * It only ever appears on YOUR screen before you fill them in — once they are set
+ * it never renders. Nothing here is shown to a buyer of a finished page. */
+(function () {
+  if (CHECKOUT) return;                       // one line, and the whole page is live
+  var bar = document.createElement('div');
+  bar.setAttribute('role', 'status');
+  bar.style.cssText = 'position:sticky;top:0;z-index:999;background:#7f1d1d;color:#fff;'
+    + 'font:600 13px/1.5 ui-monospace,monospace;padding:10px 16px;letter-spacing:.04em';
+  bar.textContent = 'NOT READY TO SELL — set CHECKOUT to the itch project URL. '
+    + 'The buy button and both feedback buttons all come from it.';
+  document.body.insertBefore(bar, document.body.firstChild);
 })();
 
 /* Receipt state. Your checkout returns to  /?paid=1&key=ABCD-1234  and this fills it in. */
