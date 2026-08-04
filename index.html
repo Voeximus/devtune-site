@@ -189,6 +189,7 @@ footer a{color:var(--dim)}
     <nav class="nav">
       <a href="#how" class="hide-sm">How</a>
       <a href="#budget" class="hide-sm">Tokens</a>
+      <a href="#stack" class="hide-sm">Why it works</a>
       <span class="price">$1.99</span>
       <a href="#get" class="btn btn-sm btn-primary">Get it</a>
     </nav>
@@ -311,6 +312,50 @@ footer a{color:var(--dim)}
           at a prompt. DevTune doesn&rsquo;t make your agent cheaper. It takes the one job that never
           belonged in the prompt out of the prompt.</p>
       </div>
+    </div>
+  </section>
+
+  <section id="stack">
+    <div class="wrap">
+      <h2>Every dial knows where it lives</h2>
+      <p>This is the part that makes the rest possible, and it&rsquo;s the part no other tuning panel has.</p>
+
+      <p>When your agent builds the game, it writes each group of numbers through DevTune. That does one
+        thing that sounds small and isn&rsquo;t: <strong>it records the address.</strong> Every control on
+        the desk carries the file and the name of the line its number came from.</p>
+
+<pre>  Sprint mul     1.35        src/player.js:sprintMul
+  Land bob       0.12        src/player.js:landBob
+  Respawn height 0.40        src/player.js:respawnHeight</pre>
+
+      <p class="dim" style="margin-top:18px">That right-hand column is the whole product. It is why
+        <strong>K</strong> can put 1.42 back into your file on the correct line instead of guessing, and why
+        it stays there when you reload.</p>
+
+      <div class="box" style="margin-top:34px">
+        <h3>Why everyone else stops at the dial</h3>
+        <p class="dim" style="margin:0">lil-gui, Tweakpane, leva and Theatre.js all hand you a slider bound
+          to a variable in memory. Nothing in that chain ever knew which line of which file the number came
+          from &mdash; so when you close the tab it&rsquo;s gone, and the only way back is to read the number
+          off the screen and type it in yourself. They aren&rsquo;t missing a feature. They&rsquo;re missing
+          the address, and you can&rsquo;t add it afterwards.</p>
+      </div>
+
+      <div class="box">
+        <h3>What that buys your agent</h3>
+        <p class="dim" style="margin:0">Because the addresses exist, so does everything built on them:
+          <strong>physics, movement and camera already written</strong> so your one-shot spends its context on
+          your game instead of a character controller &mdash; and <strong>checks that fail closed</strong>, so
+          your agent can&rsquo;t announce it&rsquo;s finished. Verify, smoke and doctor decide, and a red gate
+          stops it rather than letting it quietly work around the problem.</p>
+      </div>
+
+      <p class="dim" style="margin-top:26px; font-size:13px">
+        Attaching this to a game that&rsquo;s already written reaches about one number in six &mdash; the
+        addresses were never recorded, so they have to be guessed at. Written in from the first prompt, it
+        reaches all of them. That gap is the reason DevTune is something your agent builds <em>with</em>,
+        not something you bolt on at the end.
+      </p>
     </div>
   </section>
 
