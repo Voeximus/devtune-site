@@ -241,10 +241,6 @@ code{font-family:var(--font-body)}
 body.paid #sales{display:none}
 body.paid #receipt{display:block}
 .tick{font-family:var(--font-display); font-size:clamp(28px,5vw,54px); font-weight:800; color:var(--accent); letter-spacing:.06em; margin:0 0 10px}
-.keybox{
-  font-family:var(--font-display); font-size:clamp(20px,3.6vw,34px); font-weight:800; letter-spacing:.22em;
-  border:3px solid var(--accent); padding:18px 22px; text-align:center; word-break:break-all;
-}
 .copied{color:var(--accent); font-size:12px; margin-left:14px; opacity:0; transition:opacity .15s}
 .copied.on{opacity:1}
 
@@ -403,8 +399,9 @@ footer a{color:var(--dim)}
         <p>The box above the questions &mdash; it&rsquo;s the fastest way to reach me and I read all of it.
           For a bug, the useful three lines are: what you did, what you expected, what happened.</p></details>
       <details><summary>Refunds?</summary>
-        <p>Yes, for any reason. Message me on the project page within 14 days and I&rsquo;ll refund it &mdash;
-          no questions, no form. It&rsquo;s a v1 beta at $2.99; if it isn&rsquo;t for you, it isn&rsquo;t for you.</p></details>
+        <p>Yes, for any reason. Email <a href="mailto:hello@knottedstudios.com?subject=DevTune%20refund">hello@knottedstudios.com</a>
+          within 14 days and I&rsquo;ll refund it &mdash; no questions, no form. It&rsquo;s a v1 beta at $2.99;
+          if it isn&rsquo;t for you, it isn&rsquo;t for you.</p></details>
     </div>
   </section>
 
@@ -441,27 +438,21 @@ Cadence for long builds (hours):
         <span class="copied" id="c2">copied</span>
       </div>
 
-      <!-- ⚠️ THE KEY IS SHOWN, NOT ASKED FOR. `init` stopped requiring one — it never validated
-           anything, so it was three steps of friction protecting nothing. It stays visible because
-           it is a real receipt worth keeping; it is just not part of the install. -->
-      <div class="box" style="margin-top:34px">
-        <h3>Your key &mdash; keep it, you don&rsquo;t need it</h3>
-        <div class="keybox" id="keyval">&mdash;</div>
-        <button class="btn btn-sm" data-copy="#keyval">Copy key</button>
-        <span class="copied" id="c1">copied</span>
-        <p class="dim" style="margin:16px 0 0; font-size:13px">Proof of purchase, nothing more. There&rsquo;s no
-          account and no licence server for it to be checked against &mdash; adding one would mean this
-          tool phoning home, and it never does. Quote it if you ever need support.</p>
-      </div>
+      <!-- ⚠️ THERE IS NO LICENCE KEY, AND THIS PAGE MUST NOT IMPLY ONE. A key box lived here and
+           showed an em-dash to every buyer, because a Payment Link has no per-buyer fulfilment and
+           nothing was ever going to fill it. `init` had already stopped requiring a key — it never
+           validated anything — so the box promised a thing that neither existed nor was needed.
+           Your proof of purchase is Stripe's emailed receipt. Do not reintroduce this without a
+           server that actually issues something. -->
 
-      <div class="box" style="margin-top:44px">
+      <div class="box" style="margin-top:34px">
         <h3>Then</h3>
         <p class="dim" style="margin:0">Open Cursor, Claude Code, Grok or Codex &rarr; start a new agent chat
           <em>inside your game project</em> &rarr; paste. When it gives you a URL, open it and press <strong>C</strong>.</p>
       </div>
 
       <p class="dim" style="margin-top:26px; font-size:13px">
-        Save this page. The same key and prompt are in your email receipt.
+        Save this page &mdash; it is the install. Stripe has emailed you a receipt for the payment.
       </p>
     </div>
   </section>
@@ -648,15 +639,12 @@ var FEEDBACK_FEATURE = 'mailto:hello@knottedstudios.com?subject=DevTune%20featur
   document.body.insertBefore(bar, document.body.firstChild);
 })();
 
-/* Receipt state. Your checkout returns to  /?paid=1&key=ABCD-1234  and this fills it in. */
-var params = new URLSearchParams(location.search);
-if (params.get('paid')) {
+/* Receipt state. Stripe returns the buyer to  /?paid=1  and that one flag swaps the pitch for the
+ * install. There is nothing per-buyer to read out of the URL: a Payment Link cannot mint anything,
+ * and the prompt below installs as written. Do not add a `key` param back — an empty one rendered
+ * an em-dash under a heading that promised a key, which is the page lying to someone who just paid. */
+if (new URLSearchParams(location.search).get('paid')) {
   document.body.classList.add('paid');
-  /* ⚠️ THE PROMPT IS NO LONGER TOUCHED. It used to have `XXXX-XXXX` substituted into it, which is
-   * why `init` needed a key at all. The prompt now installs as written, so this only fills the
-   * receipt box — and a missing key leaves an em-dash rather than the literal word "null". */
-  var key = params.get('key');
-  if (key) document.getElementById('keyval').textContent = key;
 }
 
 </script>
