@@ -541,16 +541,31 @@ document.querySelectorAll('[data-copy]').forEach(function (btn) {
 /* ══════════════════════════════════════════════════════════════════════════
  * ⭐⭐ THE ONE LINE. This is the only thing on this page that needs a human.
  *
- * Paste the itch project URL here and the page goes live: the Get it button,
- * the Send feedback button and the Request a feature button all derive from
- * it, and the red NOT READY bar disappears.
+ * Paste your STRIPE PAYMENT LINK here and the page goes live: the Get it
+ * button starts working and the red NOT READY bar disappears.
  *
- *   var CHECKOUT = 'https://knottedstudios.itch.io/devtune';
+ *   var CHECKOUT = 'https://buy.stripe.com/xxxxxxxxxxxx';
+ *
+ * ⭐ WHY A PAYMENT LINK AND NOT AN API INTEGRATION. This page is a static file
+ * on GitHub Pages — there is no server to hold a secret key, and standing one
+ * up would mean running infrastructure for a product whose whole promise is
+ * that it runs on your machine and phones nobody. A Payment Link is a public
+ * URL by design: Stripe hosts the checkout, takes the card, and sends the
+ * buyer back here. Nothing secret ever touches this file.
+ *
+ * ⚠️ WHAT THE BUYER IS ACTUALLY BUYING. DevTune installs from PUBLIC npm, so
+ * the purchase is not access to a file — it is the receipt, the instructions
+ * and the support. That was already settled ("packaging is leak-assumed; the
+ * key is a receipt, not a gate"), and it is what makes a serverless checkout
+ * honest here rather than a corner cut.
+ *
+ * Success URL to set on the link:  https://devtune.knottedstudios.com/?paid=1
+ * The five dashboard steps are in  store/STRIPE.md
  *
  * Until then the buttons SAY they are not open rather than being dead clicks —
  * a Get it button that silently does nothing is worse than one that admits it.
  * ══════════════════════════════════════════════════════════════════════════ */
-var CHECKOUT = 'https://knottedstudios.itch.io/devtune';
+var CHECKOUT = 'https://buy.stripe.com/28E6oJ3W2e1j8tL7UGcEw00';
 
 (function () {
   var buy = document.getElementById('buy');
@@ -568,16 +583,19 @@ var CHECKOUT = 'https://knottedstudios.itch.io/devtune';
 })();
 
 /* ── FEEDBACK DESTINATION ───────────────────────────────────────────────────
- * ⭐ DERIVED FROM CHECKOUT, so there is only ONE line on this page to set.
+ * ⚠️ THIS USED TO BE DERIVED FROM CHECKOUT, and it cannot be any more.
  *
- * Feedback goes to the itch project's own community board: it comes free with
- * the project, buyers are already signed in there, and the threads are public —
- * which doubles as proof the tool is being maintained.
+ * It read `CHECKOUT + '#community'` because itch gives every project a
+ * community board for free — buyers already signed in, threads public, which
+ * doubled as proof the tool is maintained. Stripe has no equivalent, so that
+ * board is the one real thing this move costs, and feedback now needs its own
+ * line instead of coming free with the storefront.
  *
- * That board lives at <project URL>#community, so the moment CHECKOUT is set
- * these come alive too. Override below only if you move feedback elsewhere. */
-var FEEDBACK = CHECKOUT ? CHECKOUT.replace(/\/+$/, '') + '#community' : '';
-var FEEDBACK_FEATURE = '';
+ * A mailto is the honest default: it works the day you set it, needs no
+ * account, and someone who has just paid will use it. Swap it for a GitHub
+ * Discussions URL the moment there is a public repo to host one. */
+var FEEDBACK = 'mailto:hello@knottedstudios.com?subject=DevTune%20feedback';
+var FEEDBACK_FEATURE = 'mailto:hello@knottedstudios.com?subject=DevTune%20feature%20request';
 
 (function () {
   var main = document.getElementById('feedback-link');
@@ -625,8 +643,8 @@ var FEEDBACK_FEATURE = '';
   bar.setAttribute('role', 'status');
   bar.style.cssText = 'position:sticky;top:0;z-index:999;background:#7f1d1d;color:#fff;'
     + 'font:600 13px/1.5 ui-monospace,monospace;padding:10px 16px;letter-spacing:.04em';
-  bar.textContent = 'NOT READY TO SELL — set CHECKOUT to the itch project URL. '
-    + 'The buy button and both feedback buttons all come from it.';
+  bar.textContent = 'NOT READY TO SELL — set CHECKOUT to your Stripe Payment Link. '
+    + 'The five dashboard steps are in store/STRIPE.md.';
   document.body.insertBefore(bar, document.body.firstChild);
 })();
 
